@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Calculator</title>
+    <style>
+        /* Basic styles for calculator layout and appearance */
+        body {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#calculator {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 300px;
+    gap: 10px;
+    background-color: #333;
+    border: 2px solid #000;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#display {
+    grid-column: span 4;
+    height: 50px;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 10px;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    font-size: 24px;
+    height: 40px;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <div id="display">0</div>
+        <button class="numButton">1</button>
+        <button class="numButton">2</button>
+        <button class="numButton">3</button>
+        <button class="opButton">+</button>
+        <button class="numButton">4</button>
+        <button class="numButton">5</button>
+        <button class="numButton">6</button>
+        <button class="opButton">-</button>
+        <button class="numButton">7</button>
+        <button class="numButton">8</button>
+        <button class="numButton">9</button>
+        <button class="opButton">*</button>
+        <button class="numButton">0</button>
+        <button class="opButton">/</button>
+        <button class="eqButton">=</button>
+        <button class="clearButton">C</button>
+    </div>
+    <script>
+        let firstOperand = "";
+        let secondOperand = "";
+        let currentOperator = null;
+        let resetScreen = false;
+
+        const display = document.querySelector("#display");
+        const numButton = document.querySelectorAll(".numButton");
+        const opButton = document.querySelectorAll(".opButton");
+        const eqButton = document.querySelectorAll(".eqButton");
+        const clearButton = document.querySelector(".clearButton");
+
+        numButton.forEach(button => {
+            button.addEventListener('click', () => appendNumber(button.textContent));
+        });
+
+        opButton.forEach(button => {
+            button.addEventListener('click', () => setOperation(button.textContent));
+        });
+
+        eqButton.forEach(button => {
+            button.addEventListener('click', () => compute());
+        });
+
+        clearButton.addEventListener('click', () => clear());
+
+        function appendNumber(num) {
+            if(resetScreen) {
+                display.textContent = "";
+        resetScreen = false;
+            }
+        display.textContent += num;
+        }
+
+        function setOperation(op) {
+            if(currentOperator!=null) compute();
+            firstOperand = display.textContent;
+            currentOperator = op;
+            resetScreen = true;
+        }
+
+        function compute() {
+            secondOperand = display.textContent;
+            display.textContent = operate(currentOperator, firstOperand, secondOperand);
+            currentOperator = null;
+        }
+
+        function clear() {
+            display.textContent = "0";
+            firstOperand = "";
+            secondOperand = "";
+            currentOperator = null;
+        }
+
+        function operate(operator, a, b) {
+            a = Number(a);
+            b = Number(b);
+            switch (operator) {
+                case '+':
+                     return a + b;
+                case '-':
+                     return a - b;
+                case '*':
+                     return a * b;
+                case '/':
+                     if(b==0)
+                     return 'Error! Div by 0';
+                     return a / b;
+                default:
+                    return b;
+            }
+        }
+    </script>
+</body>
+</html>
